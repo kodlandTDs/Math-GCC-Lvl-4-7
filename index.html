@@ -276,7 +276,7 @@ dialog.lb .tbtn{position:absolute;top:8px;right:8px}
 
 /* surveys */
 body.noscroll{overflow:hidden}
-.sv-overlay{position:fixed;inset:0;z-index:500;background:rgba(10,12,8,.6);backdrop-filter:blur(4px);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:30px 14px}
+.sv-overlay{position:fixed;inset:62px 0 0 0;z-index:90;background:rgba(10,12,8,.6);backdrop-filter:blur(4px);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:30px 14px}
 .sv-modal{background:var(--surface);border:2px solid var(--border);border-radius:20px;max-width:620px;width:100%;padding:28px 26px;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:left;font-family:"Plus Jakarta Sans",sans-serif}
 .sv-head h2{font-family:Nunito,sans-serif;font-weight:900;font-size:24px;margin:4px 0 6px}
 .sv-head p{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:16px}
@@ -366,7 +366,7 @@ html[lang="ar"] .slbl,html[lang="ar"] .meyebrow,html[lang="ar"] .mc-num,html[lan
 <body>
 <nav class="nav">
   <div class="logo" data-act="home"><span class="logo-mark">kodland</span><span class="logo-div"></span><span class="logo-sub" id="logosub">Math Adventures Training</span></div>
-  <div class="nav-r"><button class="pbtn" id="backbtn" data-act="home" style="display:none">← Modules</button><button class="tbtn" data-act="theme" id="themebtn" title="Light / dark">🌙</button></div>
+  <div class="nav-r"><div class="lang" id="langsw"><button data-act="setlang" data-l="en">ENG</button><button data-act="setlang" data-l="ar">العربية</button></div><button class="pbtn" id="backbtn" data-act="home" style="display:none">← Modules</button><button class="tbtn" data-act="theme" id="themebtn" title="Light / dark">🌙</button></div>
 </nav>
 <main id="app"></main>
 <footer id="foot"></footer>
@@ -737,10 +737,16 @@ function applyTheme(t){
   if(!t) t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light';
   document.documentElement.setAttribute('data-theme',t); $('#themebtn').textContent = t==='dark'?'☀️':'🌙';
 }
+/* Language switch: reloads the page with ?lang=xx (keeps ?dev=1 and other params) */
+window.switchLang = function(l){
+  try{ const u=new URL(location.href); u.searchParams.set('lang',l); location.replace(u.toString()); }
+  catch(e){ location.search='?lang='+l+(DEV?'&dev=1':''); }
+};
 function initContent(C, lang){
   LANG=lang; T=C.UI; SURVEY=C.SURVEY; ({STAGES, GROUPCARD, ADDITIONAL, LV, MODULES} = C);
   const h=document.documentElement; h.lang=LANG; h.dir=C.UI.dir||'ltr';
   document.title = (DEV?'[DEV] ':'')+C.UI.title;
+  $$('#langsw button').forEach(b=>b.classList.toggle('on',b.dataset.l===LANG));
   $('#logosub').textContent=T.sub; $('#foot').innerHTML=T.foot; $('#backbtn').textContent=T.back;
 }
 
@@ -750,6 +756,7 @@ document.addEventListener('click', e=>{
   const a=el.dataset.act, D=Store.data;
   switch(a){
     case 'home': App.home(); break;
+    case 'setlang': if(el.dataset.l!==LANG) window.switchLang(el.dataset.l); break;
     case 'sv-pick': { const q=el.closest('.sq'); $$('[data-act="sv-pick"]',q).forEach(b=>b.classList.toggle('on',b===el)); q.classList.remove('err'); break; }
     case 'sv-start': StartSurvey.submit(); break;
     case 'sv-skip-start': StartSurvey.skip(); break;
