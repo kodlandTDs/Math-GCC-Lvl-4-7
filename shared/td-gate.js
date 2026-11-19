@@ -178,6 +178,22 @@
     w.__tdg = true; window[name] = w;
   }
   function setup(){
+    // Math GCC engine (kodlandTDs/Math-GCC-Lvl-4-7): App.open(i), content in #app .cbody, call to action .ctabtn
+    if (typeof App !== 'undefined' && App && typeof App.open === 'function' && document.getElementById('app')){
+      if (App.open.__tdg) return;
+      var origAppOpen = App.open;
+      var wApp = function(i){
+        var r = origAppOpen.apply(this, arguments);
+        try {
+          var m = MODULES[i];
+          if (m && !Store.data.done[m.id]) attach({ id:'m' + m.id, root:document.querySelector('#app .cbody'), cta:'.ctabtn', anchor:'hr.divider' });
+          else detach();
+        } catch(e){}
+        return r;
+      };
+      wApp.__tdg = true; App.open = wApp;
+      return;
+    }
     // Refunds / mini-training engine: openModule(index), content in #contentBody, call to action #moduleCta
     if (typeof window.startInteraction === 'function' && document.getElementById('contentBody')){
       var origOpen = window.openModule;
