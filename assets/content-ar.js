@@ -52,64 +52,64 @@ const UI = {
   title:'تدريب معلّمي Math Adventures — الخليج', dir:'rtl'
  };
 
-/* ---------- surveys (English in every language) ---------- */
+/* ---------- surveys ---------- */
 const SURVEY = {
-  /* Surveys are in English in every language (decision for GCC).
-     The ids and keys below are Google Sheet columns — never translate them. */
-  sectionTitle:'📝 Final survey',
-  startTag:'Before you start',
-  startTitle:'Quick start survey',
-  startIntro:'Please answer a few short questions before you start the training. It takes about 1 minute.',
-  finalTitle:'Final survey',
-  finalPill:'Required',
-  finalIntro:'Tell us how you feel now that you have finished the training. Your e-mail and region are already filled in.',
-  finalDone:'Thank you! Your final survey has been sent. The module check is now unlocked.',
-  lockMsg:'🔒 Send the survey above to unlock the module check.',
-  emailLabel:'Corporate e-mail',
-  emailError:'Please enter your corporate e-mail (it must contain @kodland).',
-  regionLabel:'Region',
-  regionPlaceholder:'Choose your region',
-  required:'This question is required.',
-  optional:'(optional)',
-  scaleMin:'Not at all',
-  scaleMax:'Completely',
-  send:'Send',
-  devSkip:'Skip survey (dev mode)',
-  fixErrors:'Please complete the highlighted fields.',
-  thanks:'Thank you! Your answers have been sent.',
-  /* Region keys (fixed, English) */
+  /* Arabic survey texts. The ids and keys below are Google Sheet columns — never translate them. */
+  sectionTitle:'📝 الاستبيان الختامي',
+  startTag:'قبل أن تبدأ',
+  startTitle:'استبيان قصير قبل البدء',
+  startIntro:'يُرجى الإجابة عن بعض الأسئلة القصيرة قبل أن تبدأ التدريب. لن يستغرق ذلك أكثر من دقيقة واحدة تقريبًا.',
+  finalTitle:'الاستبيان الختامي',
+  finalPill:'إلزامي',
+  finalIntro:'أخبرنا بشعورك الآن بعد أن أنهيت التدريب. بريدك الإلكتروني ومنطقتك معبّآن مسبقًا.',
+  finalDone:'شكرًا لك! تم إرسال الاستبيان الختامي، وأصبح اختبار الوحدة مفتوحًا الآن.',
+  lockMsg:'🔒 أرسل الاستبيان أعلاه ليُفتح اختبار الوحدة.',
+  emailLabel:'البريد الإلكتروني الخاص بالعمل',
+  emailError:'يُرجى إدخال بريدك الإلكتروني الخاص بالعمل (يجب أن يحتوي على ‎@kodland).',
+  regionLabel:'المنطقة',
+  regionPlaceholder:'اختر منطقتك',
+  required:'هذا السؤال إلزامي.',
+  optional:'(اختياري)',
+  scaleMin:'لا على الإطلاق',
+  scaleMax:'تمامًا',
+  send:'إرسال',
+  devSkip:'تخطّي الاستبيان (وضع المطوّر)',
+  fixErrors:'يُرجى إكمال الحقول المميّزة باللون الأحمر.',
+  thanks:'شكرًا لك! تم إرسال إجاباتك.',
+  /* Region keys (fixed, English) — only the labels are translated */
   regions:[
-    {key:'brazil', label:'Brazil'}, {key:'latam', label:'LATAM'}, {key:'mena', label:'MENA'}, {key:'italy', label:'Italy'},
-    {key:'poland', label:'Poland'}, {key:'uk', label:'UK'}, {key:'usa', label:'USA'}, {key:'indonesia', label:'Indonesia'},
-    {key:'gcc', label:'GCC'}, {key:'cis', label:'CIS'}],
+    {key:'brazil', label:'البرازيل'}, {key:'latam', label:'أمريكا اللاتينية (LATAM)'}, {key:'mena', label:'الشرق الأوسط وشمال أفريقيا (MENA)'}, {key:'italy', label:'إيطاليا'},
+    {key:'poland', label:'بولندا'}, {key:'uk', label:'المملكة المتحدة'}, {key:'usa', label:'الولايات المتحدة'}, {key:'indonesia', label:'إندونيسيا'},
+    {key:'gcc', label:'دول الخليج (GCC)'}, {key:'cis', label:'رابطة الدول المستقلة (CIS)'}],
   /* Region preselected from the language (the tutor can change it) */
   defaultRegion:{ es:'latam', pt:'brazil', it:'italy', pl:'poland', ru:'cis', tr:'mena', id:'indonesia', 'en-US':'usa', ar:'gcc' },
-  /* Feeling options: key = value sent to the Sheet */
+  /* Feeling options: key = value sent to the Sheet (stays in English) */
   feelings:[
-    {key:'excited', emoji:'🤩', label:'Excited'}, {key:'curious', emoji:'🤔', label:'Curious'}, {key:'calm', emoji:'😌', label:'Calm'},
-    {key:'unsure', emoji:'😕', label:'Unsure'}, {key:'worried', emoji:'😟', label:'Worried'}, {key:'overwhelmed', emoji:'😵', label:'Overwhelmed'}],
+    {key:'excited', emoji:'🤩', label:'متحمّس'}, {key:'curious', emoji:'🤔', label:'فضولي'}, {key:'calm', emoji:'😌', label:'هادئ'},
+    {key:'unsure', emoji:'😕', label:'متردّد'}, {key:'worried', emoji:'😟', label:'قلق'}, {key:'overwhelmed', emoji:'😵', label:'مُثقَل'}],
   startQuestions:[
-    {id:'feeling', type:'choice', text:'How do you feel about this new launch right now?'},
-    {id:'confidence', type:'scale', text:'How confident do you feel about teaching this new course or format?'},
-    {id:'understand_why', type:'scale', text:'I understand why we are making this change.'},
-    {id:'know_where', type:'scale', text:'I know where to find what I need and who to ask for help.'},
-    {id:'worries', type:'open', optional:true, text:'What worries you most about this launch?'}],
+    {id:'feeling', type:'choice', text:'ما شعورك تجاه هذا الإطلاق الجديد في هذه اللحظة؟'},
+    {id:'confidence', type:'scale', text:'ما مدى ثقتك في تدريس هذه الدورة أو هذا الأسلوب الجديد؟'},
+    {id:'understand_why', type:'scale', text:'أفهم سبب إجراء هذا التغيير.'},
+    {id:'know_where', type:'scale', text:'أعرف أين أجد ما أحتاج إليه، ومن أسأل عند الحاجة إلى المساعدة.'},
+    {id:'worries', type:'open', optional:true, text:'ما أكثر ما يقلقك في هذا الإطلاق؟'}],
   finalGroups:[
-    {title:'How you feel', questions:[
-      {id:'feeling', type:'choice', text:'How do you feel about this new launch now?'},
-      {id:'confidence', type:'scale', text:'How confident do you feel about teaching this new course or format?'},
-      {id:'understand_why', type:'scale', text:'I understand why we are making this change.'},
-      {id:'know_where', type:'scale', text:'I know where to find what I need and who to ask for help.'}]},
-    {title:'Your confidence to teach', questions:[
-      {id:'ready_first_lesson', type:'scale', text:'I feel ready to run my first lesson from start to finish.'},
-      {id:'know_course', type:'scale', text:'I know what students do and achieve in this course.'},
-      {id:'ready_tools', type:'scale', text:'I feel ready to use Back Office, Wiki, Genially, the Classroom and the tools in class.'},
-      {id:'ready_teach_math', type:'scale', text:'I feel ready to teach math to children in this course.'}]},
-    {title:'The training materials', questions:[
-      {id:'training_clear', type:'scale', text:'The training was clear and easy to follow.'},
-      {id:'math_tips_helped', type:'scale', text:'The math teaching tips in the training were useful.'},
-      {id:'improve', type:'open', optional:true, text:'What would you improve in this training?'}]}]
-};
+    {title:'شعورك', questions:[
+      {id:'feeling', type:'choice', text:'ما شعورك تجاه هذا الإطلاق الجديد الآن؟'},
+      {id:'confidence', type:'scale', text:'ما مدى ثقتك في تدريس هذه الدورة أو هذا الأسلوب الجديد؟'},
+      {id:'understand_why', type:'scale', text:'أفهم سبب إجراء هذا التغيير.'},
+      {id:'know_where', type:'scale', text:'أعرف أين أجد ما أحتاج إليه، ومن أسأل عند الحاجة إلى المساعدة.'}]},
+    {title:'ثقتك في التدريس', questions:[
+      {id:'ready_first_lesson', type:'scale', text:'أشعر بأنني مستعد لتقديم درسي الأول من بدايته إلى نهايته.'},
+      {id:'know_course', type:'scale', text:'أعرف ما يفعله الطلاب وما يحقّقونه في هذه الدورة.'},
+      {id:'ready_tools', type:'scale', text:'أشعر بأنني مستعد لاستخدام Back Office وWiki وGenially وClassroom والأدوات الأخرى في الدرس.'},
+      {id:'ready_teach_math', type:'scale', text:'أشعر بأنني مستعد لتدريس الرياضيات للأطفال في هذه الدورة.'}]},
+    {title:'المواد التدريبية', questions:[
+      {id:'training_clear', type:'scale', text:'كان التدريب واضحًا وسهل المتابعة.'},
+      {id:'math_tips_helped', type:'scale', text:'كانت نصائح تدريس الرياضيات في التدريب مفيدة.'},
+      {id:'improve', type:'open', optional:true, text:'ما الذي تقترح تحسينه في هذا التدريب؟'}]}]
+}
+;
 
 /* ---------- training content ---------- */
 
