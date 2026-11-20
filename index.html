@@ -463,24 +463,26 @@ function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); 
 
 /* Protection 2 — LMS bridge (postMessage to the parent window) */
 let LMS_READY=false, COMPLETED_SENT=false;
-function lmsSummary(){
+function baseSummary_(){   // counts only (td-time.js wraps lmsSummary to add time; internal checks must not trigger it)
   const total=MODULES.length, done=MODULES.filter(m=>Store.data.done[m.id]).length;
   const sc=MODULES.filter(m=>Store.data.done[m.id]).map(m=>Store.data.scores[m.id]||0);
   return {progress:Math.round(done/total*100), done, total, score: sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length*100):0};
 }
+function lmsSummary(){ return baseSummary_(); }
 function lmsSend(event){
   if(DEV) return;                                   // developer mode sends nothing
   let inFrame=false; try{ inFrame = window.parent && window.parent!==window; }catch(e){ inFrame=true; }
   if(!inFrame) return;                              // outside an iframe it does nothing
-  let sum={}; try{ sum = window.lmsSummary(); }catch(e){ sum = lmsSummary(); }   // shared/td-time.js adds the time fields
+  let sum={}; try{ sum = window.lmsSummary(); }catch(e){ sum = baseSummary_(); }   // shared/td-time.js adds the time fields
   try{ window.parent.postMessage(Object.assign({source:'kodland-training', training:TRAINING_ID, lang:LANG, event}, sum), '*'); }catch(e){}
 }
 function lmsCompletedCheck(){   // 'completed' once per page load, as soon as every module is passed
   if(COMPLETED_SENT || DEV) return;
-  const st=lmsSummary();
+  const st=baseSummary_();
   if(st.total>0 && st.done===st.total){ COMPLETED_SENT=true; lmsSend('completed'); }
 }
 /* Protection 4 — adapter for shared/td-time.js (time per module) */
+if(CONFIG.SURVEY_URL) window.TD_TIME_SHEET_URL = CONFIG.SURVEY_URL;   // time rows ALSO go to the survey Sheet (tab "Training time"), besides the central TD sheet
 window.TD_TIME_ADAPTER = {
   training: () => TRAINING_ID,
   lang: () => LANG,

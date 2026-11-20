@@ -103,9 +103,12 @@ const SURVEY = {
     {title:'Your confidence to teach', questions:[
       {id:'ready_first_lesson', type:'scale', text:'I feel ready to run my first lesson from start to finish.'},
       {id:'know_course', type:'scale', text:'I know what students do and achieve in this course.'},
-      {id:'ready_tools', type:'scale', text:'I feel ready to use Back Office, Wiki, Genially, the Classroom and the tools in class.'}]},
+      {id:'ready_tools', type:'scale', text:'I feel ready to use Back Office, Wiki, Genially, the Classroom and the tools in class.'},
+      {id:'ready_teach_math', type:'scale', text:'I feel ready to teach math to children in this course.'}]},
     {title:'The training materials', questions:[
-      {id:'training_clear', type:'scale', text:'The training was clear and easy to follow.'}]}]
+      {id:'training_clear', type:'scale', text:'The training was clear and easy to follow.'},
+      {id:'math_tips_helped', type:'scale', text:'The math teaching tips in the training were useful.'},
+      {id:'improve', type:'open', optional:true, text:'What would you improve in this training?'}]}]
 };
 
 /* ---------- training content ---------- */

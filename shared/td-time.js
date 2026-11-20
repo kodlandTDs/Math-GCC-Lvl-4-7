@@ -23,7 +23,9 @@
   'use strict';
   /* ---------- CONFIG ---------- */
   var SHEET_ENABLED = true;
-  var SHEET_URL = window.TD_TIME_SHEET_URL || 'https://script.google.com/macros/s/AKfycbw_9JLpeeQfUniqppJTXbncYW-BVkS4g4astfCwBV8qGTY3vLb6dzbGSEGWzuL4xt0A/exec';
+  var SHEET_URL = 'https://script.google.com/macros/s/AKfycbw_9JLpeeQfUniqppJTXbncYW-BVkS4g4astfCwBV8qGTY3vLb6dzbGSEGWzuL4xt0A/exec';   // TD Trainings – Time per module (central)
+  // a training can ALSO send its time rows to its own Sheet: window.TD_TIME_SHEET_URL (both get the same row)
+  var SHEET_URLS = [SHEET_URL, window.TD_TIME_SHEET_URL].filter(function(u, i, a){ return u && a.indexOf(u) === i; });
   var IDLE_MS = 120000;   // no input for 2 minutes = not counted
 
   /* ---------- engine globals (read safely: each training engine names them a bit differently) ---------- */
@@ -105,7 +107,7 @@
   /* ---------- what goes to the LMS ---------- */
   function fields(){
     var t = load(), mm = {};
-    if (!t.finished_at && !isDev() && allDone()){ t.finished_at = new Date().toISOString(); save(); }
+    if (!t.finished_at && !isDev() && allDone()){ t.finished_at = new Date().toISOString(); save(); setTimeout(function(){ sendSheet(true); }, 0); }   // completion row also when the LMS message sets it first
     modules().forEach(function(id){ mm[id] = min1(t.mods[id]); });
     return { time_active_min:min1(t.total), time_module_min:mm, time_started_at:t.started_at, time_finished_at:t.finished_at };
   }
@@ -120,7 +122,7 @@
 
   /* ---------- optional Google Sheet row (same format as the Refunds trainings) ---------- */
   function sendSheet(beacon){
-    if (!SHEET_ENABLED || !SHEET_URL || isDev()) return;
+    if (!SHEET_ENABLED || !SHEET_URLS.length || isDev()) return;
     var t = load(), who = identity();
     if (!t.started_at) return;
     var ids = modules();
@@ -128,8 +130,10 @@
       training:trainingId(), training_name:trainingId(), lang:lang(),
       started_at:t.started_at, finished_at:t.finished_at, completed:!!t.finished_at, active_min:min1(t.total),
       module_ids:ids, module_min:ids.map(function(id){ return min1(t.mods[id]); }) });
-    try { if (beacon && navigator.sendBeacon && navigator.sendBeacon(SHEET_URL, new Blob([body], { type:'text/plain;charset=utf-8' }))) return; } catch(e){}
-    try { fetch(SHEET_URL, { method:'POST', mode:'no-cors', keepalive:true, headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body:body }); } catch(e){}
+    SHEET_URLS.forEach(function(url){
+      try { if (beacon && navigator.sendBeacon && navigator.sendBeacon(url, new Blob([body], { type:'text/plain;charset=utf-8' }))) return; } catch(e){}
+      try { fetch(url, { method:'POST', mode:'no-cors', keepalive:true, headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body:body }); } catch(e){}
+    });
   }
 
   // Leaving or hiding the page: save the time so far in the LMS (and Sheet), at most once a minute.
